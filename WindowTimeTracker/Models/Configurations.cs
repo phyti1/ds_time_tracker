@@ -108,6 +108,26 @@ namespace WindowTimeTracker.Models
                 OnPropertyChanged();
             }
         }
+        int _inactivityCount = 0;
+        public int InactivityCount
+        {
+            get => _inactivityCount;
+            set
+            {
+                _inactivityCount = value;
+                OnPropertyChanged();
+            }
+        }
+        int _inactivityTrigger = 10;
+        public int InactivityTrigger
+        {
+            get => _inactivityTrigger;
+            set
+            {
+                _inactivityTrigger = value;
+                OnPropertyChanged();
+            }
+        }
         public bool SaveLogFile(bool Ab_Closing)
         {
             try

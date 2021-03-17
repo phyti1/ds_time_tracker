@@ -6,9 +6,9 @@
         xmlns:v="clr-namespace:WindowTimeTracker.Views"
         xmlns:m="clr-namespace:WindowTimeTracker.Models"
         mc:Ignorable="d"
-        Title="Window Tracker" Height="450" Width="800"
-        xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Window Tracker" Height="450" MinHeight="300" Width="800" MinWidth="500"
         
+        xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
@@ -16,26 +16,39 @@
 ><!--Background="{DynamicResource MaterialDesignPaper}"-->
     <DockPanel>
         <DockPanel DockPanel.Dock="Top">
-            <ToggleButton Margin="10" DockPanel.Dock="Right" IsChecked="{Binding Source={x:Static m:Configurations.Instance}, Path=IsTracking}" />
-            <Button DockPanel.Dock="Right" Content="Save" Command="{Binding SaveLogCommand}" />
-            <TextBlock Margin="10" Text="WINDOW ANALYZER" FontWeight="Bold" TextAlignment="Left" />
+            <TextBlock Margin="10" Text="WINDOW ANALYZER BY PASCAL BERGER" FontWeight="Bold" FontSize="20" TextAlignment="Left" />
         </DockPanel>
-        <StackPanel Margin="10" DockPanel.Dock="Top" Orientation="Horizontal">
-            <GroupBox Header="Log FilePath:">
+        <WrapPanel Margin="10" DockPanel.Dock="Top" Orientation="Horizontal">
+            <GroupBox Margin="5" Header="ACTIVE">
+                <ToggleButton Margin="10" DockPanel.Dock="Left" IsChecked="{Binding Source={x:Static m:Configurations.Instance}, Path=IsTracking}" />
+            </GroupBox>
+            <GroupBox Margin="5" Header="LOG">
+                <Button DockPanel.Dock="Right" Content="Save" Command="{Binding SaveLogCommand}" />
+            </GroupBox>
+            <GroupBox Margin="5" Header="LOG FILE PATH">
                 <StackPanel>
-                    <!--<TextBlock VerticalAlignment="Center" Text="Log FilePath: " />-->
+                    <!--<TextBlock VerticalAlignment="Center" Text="Log FilePath: " />--> 
                     <TextBox Text="{Binding Source={x:Static m:Configurations.Instance}, Path=FilePath}" />
                 </StackPanel>
             </GroupBox>
-            <GroupBox Margin="5,0,0,0" Header="Scan Interval [s]">
+            <GroupBox Margin="5" Header="SCAN INTERNVAL [s]">
                 <StackPanel>
                     <!--<TextBlock VerticalAlignment="Center" Margin="20,0,0,0" Text="" />-->
                     <TextBox Text="{Binding Source={x:Static m:Configurations.Instance}, Path=ScanIntervalS}" />
                 </StackPanel>
             </GroupBox>
-        </StackPanel>
-        <TextBox Margin="20" Text="{Binding Source={x:Static m:Configurations.Instance}, Path=StringLog}" IsReadOnly="True" />
-        <!--<TextBox Margin="20" Text="{Binding StringLog}" IsReadOnly="True" />-->
+            <GroupBox Margin="5" Header="DEACTIVATE ON INACTIVITY">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Text="{Binding Source={x:Static m:Configurations.Instance}, Path=InactivityCount}" />
+                    <TextBlock Margin="10,0,10,0" VerticalAlignment="Center" Text="/" />
+                    <TextBox VerticalAlignment="Center" Text="{Binding Source={x:Static m:Configurations.Instance}, Path=InactivityTrigger}" />
+                </StackPanel>
+            </GroupBox>
+        </WrapPanel>
+        <!--Log Window-->
+        <ScrollViewer>
+            <TextBox Margin="20" Text="{Binding Source={x:Static m:Configurations.Instance}, Path=StringLog}" IsReadOnly="True" />
+        </ScrollViewer>
         <!--<ListView ItemsSource="{Binding Source={x:Static m:Configurations.Instance}, Path=Log}">
             <ListView.ItemTemplate>
                 <DataTemplate>

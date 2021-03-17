@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace WindowTimeTracker.Models
 {
@@ -179,9 +180,58 @@ namespace WindowTimeTracker.Models
 				lastWindowTitle = windowTitle;
 			}
 		}
+		Point _originalMousePos;
+		LowLevelKeyboardListener _listener = null;
+		void CheckInactivity()
+		{
+            #region Keyboard detection
+            void _listener_OnKeyPressed(object sender, KeyPressedArgs e)
+			{
+				//works
+				Configurations.Instance.InactivityCount = 0;
+			}
+			if(_listener == null)
+            {
+				_listener = new LowLevelKeyboardListener();
+				_listener.OnKeyPressed -= _listener_OnKeyPressed;
+				_listener.OnKeyPressed += _listener_OnKeyPressed;
+				_listener.HookKeyboard();
+			}
+			
+			if (Application.Current == null)
+            {
+				_listener.UnHookKeyboard();
+            }
+			#endregion
+			#region MouseActivity
+			Application.Current.Dispatcher.Invoke(() =>
+			{
+				Point _currentMousePos = MousePosition.GetCursorPosition();
+				if (_currentMousePos != _originalMousePos)
+				{
+					//mouse was active, works
+					Configurations.Instance.InactivityCount = 0;
+					_originalMousePos = _currentMousePos;
+				}
+			});
+			#endregion
+			if(Configurations.Instance.InactivityTrigger != 0)
+            {
+				if (Configurations.Instance.InactivityCount > Configurations.Instance.InactivityTrigger)
+				{
+					Configurations.Instance.IsTracking = false;
+					if (MessageBox.Show("Automatically deactivated log due to inactivity. Reactivate?", "Deactivated", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+					{
+						Configurations.Instance.IsTracking = true;
+					}
+				}
+			}
+			Configurations.Instance.InactivityCount += 1;
+		}
 
 		public Reader()
 		{
+
 			Task.Run(() =>
 			{
                 while(Application.Current != null)
@@ -189,13 +239,16 @@ namespace WindowTimeTracker.Models
                     if (Configurations.Instance.IsTracking)
                     {
 						WriteCurrentWindowInformation();
+						CheckInactivity();
 						Thread.Sleep(Configurations.Instance.ScanIntervalS * 1000);
 					}
 				}
 			});
 
 		}
-		public void StopTracking()
+
+
+        public void StopTracking()
         {
 			throw new NotImplementedException();
         }

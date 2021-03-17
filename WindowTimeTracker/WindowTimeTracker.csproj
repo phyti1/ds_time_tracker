@@ -76,6 +76,8 @@
     </Compile>
     <Compile Include="Models\BaseClass.cs" />
     <Compile Include="Models\Configurations.cs" />
+    <Compile Include="Models\KeyboardHook.cs" />
+    <Compile Include="Models\MousePosition.cs" />
     <Compile Include="Models\Reader.cs" />
     <Compile Include="Models\WindowInformations.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
