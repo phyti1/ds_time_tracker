@@ -27,14 +27,26 @@ namespace WindowTimeTracker.Views
             InitializeComponent();
             DataContext = o_ViewModel = new MainWindowViewModel();
             Closing += MainWindow_Closing;
+            //Closed += MainWindow_Closed;
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if(MessageBox.Show("Save to log?", "Warning", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            var _result = MessageBox.Show("Save data to log?", "Warning", MessageBoxButton.YesNoCancel);
+            if (_result == MessageBoxResult.Yes)
             {
-                Models.Configurations.Instance.SaveLogFile();
+                Models.Configurations.Instance.SaveLogFile(true);
             }
+            else if(_result == MessageBoxResult.Cancel)
+            {
+                e.Cancel = true;
+            }
+            
         }
+
+        //private void MainWindow_Closed(object sender, EventArgs e)
+        //{
+        //}
+        
     }
 }

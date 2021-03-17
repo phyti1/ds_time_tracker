@@ -46,7 +46,10 @@ namespace WindowTimeTracker.Models
         //        }
         //    }
         //}
-
+        private string GetOffLine()
+        {
+            return $"{DateTime.Now.ToUniversalTime()},OFF,,,\n";
+        }
         bool _isTracking = false;
         public bool IsTracking
         {
@@ -55,6 +58,11 @@ namespace WindowTimeTracker.Models
             {
                 if(value != _isTracking)
                 {
+                    if(value == false)
+                    {
+                        //add empty line when deactivating
+                        StringLog += GetOffLine();
+                    }
                     _isTracking = value;
                 }
                 OnPropertyChanged();
@@ -100,7 +108,7 @@ namespace WindowTimeTracker.Models
                 OnPropertyChanged();
             }
         }
-        public bool SaveLogFile()
+        public bool SaveLogFile(bool Ab_Closing)
         {
             try
             {
@@ -116,6 +124,10 @@ namespace WindowTimeTracker.Models
                     _logStream.WriteLine("DateTime,FileDescription,ProductName,ProcessName,WindowTitle");
                 }
                 _logStream.Write(_stringLog);
+                if (Ab_Closing)
+                {
+                    _logStream.Write(GetOffLine());
+                }
                 _logStream.Close();
                 StringLog = "";
                 return true;

@@ -28,7 +28,7 @@ namespace WindowTimeTracker.ViewModels
         {
             SaveLogCommand = new RelayCommand((arg) =>
             {
-                Configurations.Instance.SaveLogFile();
+                Configurations.Instance.SaveLogFile(false);
             });
             Task.Run(() =>
             {

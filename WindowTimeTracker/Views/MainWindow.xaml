@@ -27,7 +27,7 @@
                     <TextBox Text="{Binding Source={x:Static m:Configurations.Instance}, Path=FilePath}" />
                 </StackPanel>
             </GroupBox>
-            <GroupBox Margin="5,0,0,0" Header="ScanInterval [s]">
+            <GroupBox Margin="5,0,0,0" Header="Scan Interval [s]">
                 <StackPanel>
                     <!--<TextBlock VerticalAlignment="Center" Margin="20,0,0,0" Text="" />-->
                     <TextBox Text="{Binding Source={x:Static m:Configurations.Instance}, Path=ScanIntervalS}" />
