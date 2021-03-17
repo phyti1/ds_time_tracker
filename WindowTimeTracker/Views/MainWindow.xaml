@@ -1,0 +1,53 @@
+﻿<Window x:Class="WindowTimeTracker.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:v="clr-namespace:WindowTimeTracker.Views"
+        xmlns:m="clr-namespace:WindowTimeTracker.Models"
+        mc:Ignorable="d"
+        Title="Window Tracker" Height="450" Width="800"
+        xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
+        
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="{material:MaterialDesignFont}"
+><!--Background="{DynamicResource MaterialDesignPaper}"-->
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <ToggleButton Margin="10" DockPanel.Dock="Right" IsChecked="{Binding Source={x:Static m:Configurations.Instance}, Path=IsTracking}" />
+            <Button DockPanel.Dock="Right" Content="Save" Command="{Binding SaveLogCommand}" />
+            <TextBlock Margin="10" Text="WINDOW ANALYZER" FontWeight="Bold" TextAlignment="Left" />
+        </DockPanel>
+        <StackPanel Margin="10" DockPanel.Dock="Top" Orientation="Horizontal">
+            <GroupBox Header="Log FilePath:">
+                <StackPanel>
+                    <!--<TextBlock VerticalAlignment="Center" Text="Log FilePath: " />-->
+                    <TextBox Text="{Binding Source={x:Static m:Configurations.Instance}, Path=FilePath}" />
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Margin="5,0,0,0" Header="ScanInterval [s]">
+                <StackPanel>
+                    <!--<TextBlock VerticalAlignment="Center" Margin="20,0,0,0" Text="" />-->
+                    <TextBox Text="{Binding Source={x:Static m:Configurations.Instance}, Path=ScanIntervalS}" />
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+        <TextBox Margin="20" Text="{Binding Source={x:Static m:Configurations.Instance}, Path=StringLog}" IsReadOnly="True" />
+        <!--<TextBox Margin="20" Text="{Binding StringLog}" IsReadOnly="True" />-->
+        <!--<ListView ItemsSource="{Binding Source={x:Static m:Configurations.Instance}, Path=Log}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        --><!--<TextBlock Text="{Binding UtcTimeStamp}" />--><!--
+                        <TextBlock Text="{Binding FileDescription}" />
+                        <TextBlock Text="{Binding ProductName}" />
+                        <TextBlock Text="{Binding ProcessName}" />
+                        <TextBlock Text="{Binding WindowTitle}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>-->
+    </DockPanel>
+</Window>
