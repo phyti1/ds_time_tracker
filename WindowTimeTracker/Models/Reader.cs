@@ -183,33 +183,33 @@ namespace WindowTimeTracker.Models
 		Point _originalMousePos;
 		LowLevelKeyboardListener _listener = null;
 		void CheckInactivity()
-		{
-            #region Keyboard detection
-            void _listener_OnKeyPressed(object sender, KeyPressedArgs e)
-			{
-				//works
-				Configurations.Instance.InactivityCount = 0;
-			}
-			if(_listener == null)
-            {
-				_listener = new LowLevelKeyboardListener();
-				_listener.OnKeyPressed -= _listener_OnKeyPressed;
-				_listener.OnKeyPressed += _listener_OnKeyPressed;
-				_listener.HookKeyboard();
-			}
-			
-			if (Application.Current == null)
-            {
-				_listener.UnHookKeyboard();
-            }
-			#endregion
-			#region MouseActivity
+		{ 
 			Application.Current.Dispatcher.Invoke(() =>
 			{
+				#region Keyboard detection
+				void _listener_OnKeyPressed(object sender, KeyPressedArgs e)
+				{
+					//works on ui thread only
+					Configurations.Instance.InactivityCount = 0;
+				}
+				if(_listener == null)
+				{
+					_listener = new LowLevelKeyboardListener();
+					_listener.OnKeyPressed -= _listener_OnKeyPressed;
+					_listener.OnKeyPressed += _listener_OnKeyPressed;
+					_listener.HookKeyboard();
+				}
+			
+				if (Application.Current == null)
+				{
+					_listener.UnHookKeyboard();
+				}
+				#endregion
+			#region MouseActivity
 				Point _currentMousePos = MousePosition.GetCursorPosition();
 				if (_currentMousePos != _originalMousePos)
 				{
-					//mouse was active, works
+					//works on ui thread
 					Configurations.Instance.InactivityCount = 0;
 					_originalMousePos = _currentMousePos;
 				}
@@ -219,11 +219,14 @@ namespace WindowTimeTracker.Models
             {
 				if (Configurations.Instance.InactivityCount > Configurations.Instance.InactivityTrigger)
 				{
-					Configurations.Instance.IsTracking = false;
-					if (MessageBox.Show("Automatically deactivated log due to inactivity. Reactivate?", "Deactivated", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+					Application.Current.Dispatcher.Invoke(() =>
 					{
-						Configurations.Instance.IsTracking = true;
-					}
+						Configurations.Instance.IsTracking = false;
+						if (MessageBox.Show("Automatically deactivated log due to inactivity. Reactivate?", "Deactivated", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+						{
+							Configurations.Instance.IsTracking = true;
+						}
+					});
 				}
 			}
 			Configurations.Instance.InactivityCount += 1;
