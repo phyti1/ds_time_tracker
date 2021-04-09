@@ -13,14 +13,14 @@ namespace WindowTimeTracker.Models
 {
     class Configurations : BaseClass
     {
-        private static Configurations _instance = new Configurations();
+        private static Configurations _instance = null;
         public static Configurations Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    Configurations.Deserialize(_filePath, true);
+                    Configurations.Deserialize(_configFilePath, true);
                 }
                 return _instance;
             }
@@ -143,7 +143,7 @@ namespace WindowTimeTracker.Models
         {
             try
             {
-                var _logFile = new FileInfo(_filePath);
+                var _logFile = new FileInfo(_logFilePath);
                 if (!_logFile.Exists)
                 {
                     _logFile.Create();
@@ -166,13 +166,14 @@ namespace WindowTimeTracker.Models
             catch(Exception ex)
             {
                 Console.WriteLine(ex);
+                MessageBox.Show(ex.ToString());
                 return false;
             }
         }
 
         [JsonIgnore]
         internal static bool _configIsLoading = false;
-        private static string _filePath
+        private static string _configFilePath
         {
             get
             {
@@ -192,18 +193,18 @@ namespace WindowTimeTracker.Models
         private static object _lockobj = new object();
         public static void TrySerialize()
         {
-            if (_instance == null || string.IsNullOrWhiteSpace(_filePath)) { throw new Exception("Cannot serialize"); }
+            if (_instance == null || string.IsNullOrWhiteSpace(_configFilePath)) { throw new Exception("Cannot serialize"); }
             lock (_lockobj)
             {
                 try
                 {
-                    if (File.Exists(_filePath) == false)
+                    if (File.Exists(_configFilePath) == false)
                     {
-                        File.Create(_filePath).Close();
+                        File.Create(_configFilePath).Close();
                     }
                     //otherwise it would add it
-                    File.WriteAllText(_filePath, string.Empty);
-                    using (var streamWriter = new StreamWriter(_filePath, true))
+                    File.WriteAllText(_configFilePath, string.Empty);
+                    using (var streamWriter = new StreamWriter(_configFilePath, true))
                     {
                         var _jsonString = JsonConvert.SerializeObject(Instance);
                         streamWriter.WriteLine(_jsonString);
