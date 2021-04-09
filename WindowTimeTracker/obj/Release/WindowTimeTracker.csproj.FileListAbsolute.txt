@@ -23,3 +23,5 @@ C:\Projects\WindowTimeTracker\WindowTimeTracker\obj\Release\WindowTimeTracker.cs
 C:\Projects\WindowTimeTracker\WindowTimeTracker\obj\Release\WindowTimeTracker.csproj.CopyComplete
 C:\Projects\WindowTimeTracker\WindowTimeTracker\obj\Release\WindowTimeTracker.exe
 C:\Projects\WindowTimeTracker\WindowTimeTracker\obj\Release\WindowTimeTracker.pdb
+C:\Projects\WindowTimeTracker\WindowTimeTracker\bin\Release\Newtonsoft.Json.dll
+C:\Projects\WindowTimeTracker\WindowTimeTracker\bin\Release\Newtonsoft.Json.xml

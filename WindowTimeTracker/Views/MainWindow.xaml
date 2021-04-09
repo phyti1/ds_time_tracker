@@ -22,13 +22,11 @@
             <GroupBox Margin="5" Header="ACTIVE">
                 <ToggleButton Margin="10" DockPanel.Dock="Left" IsChecked="{Binding Source={x:Static m:Configurations.Instance}, Path=IsTracking}" />
             </GroupBox>
-            <GroupBox Margin="5" Header="LOG">
-                <Button DockPanel.Dock="Right" Content="Save" Command="{Binding SaveLogCommand}" />
-            </GroupBox>
-            <GroupBox Margin="5" Header="LOG FILE PATH">
-                <StackPanel>
-                    <!--<TextBlock VerticalAlignment="Center" Text="Log FilePath: " />--> 
-                    <TextBox Text="{Binding Source={x:Static m:Configurations.Instance}, Path=FilePath}" />
+            <GroupBox Margin="5" Header="AUTO ACT/DEACT">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Text="{Binding Source={x:Static m:Configurations.Instance}, Path=InactivityCount}" />
+                    <TextBlock Margin="10,0,10,0" VerticalAlignment="Center" Text="/" />
+                    <TextBox VerticalAlignment="Center" Text="{Binding Source={x:Static m:Configurations.Instance}, Path=InactivityTrigger}" material:HintAssist.Hint="0=OFF" />
                 </StackPanel>
             </GroupBox>
             <GroupBox Margin="5" Header="SCAN INTERNVAL [s]">
@@ -37,11 +35,13 @@
                     <TextBox Text="{Binding Source={x:Static m:Configurations.Instance}, Path=ScanIntervalS}" />
                 </StackPanel>
             </GroupBox>
-            <GroupBox Margin="5" Header="DEACTIVATE ON INACTIVITY">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="{Binding Source={x:Static m:Configurations.Instance}, Path=InactivityCount}" />
-                    <TextBlock Margin="10,0,10,0" VerticalAlignment="Center" Text="/" />
-                    <TextBox VerticalAlignment="Center" Text="{Binding Source={x:Static m:Configurations.Instance}, Path=InactivityTrigger}" />
+            <GroupBox Margin="5" Header="LOG + CONFIG">
+                <Button DockPanel.Dock="Right" Content="SAVE" Command="{Binding SaveLogCommand}" />
+            </GroupBox>
+            <GroupBox Margin="5" Header="LOG FILE PATH">
+                <StackPanel>
+                    <!--<TextBlock VerticalAlignment="Center" Text="Log FilePath: " />--> 
+                    <TextBox Text="{Binding Source={x:Static m:Configurations.Instance}, Path=LogFilePath}" />
                 </StackPanel>
             </GroupBox>
         </WrapPanel>

@@ -182,7 +182,7 @@ namespace WindowTimeTracker.Models
 		}
 		Point _originalMousePos;
 		LowLevelKeyboardListener _listener = null;
-		void CheckInactivity()
+		void HandleInactivity()
 		{ 
 			Application.Current.Dispatcher.Invoke(() =>
 			{
@@ -205,7 +205,7 @@ namespace WindowTimeTracker.Models
 					_listener.UnHookKeyboard();
 				}
 				#endregion
-			#region MouseActivity
+				#region MouseActivity
 				Point _currentMousePos = MousePosition.GetCursorPosition();
 				if (_currentMousePos != _originalMousePos)
 				{
@@ -213,23 +213,21 @@ namespace WindowTimeTracker.Models
 					Configurations.Instance.InactivityCount = 0;
 					_originalMousePos = _currentMousePos;
 				}
-			});
-			#endregion
-			if(Configurations.Instance.InactivityTrigger != 0)
-            {
+				#endregion
 				if (Configurations.Instance.InactivityCount > Configurations.Instance.InactivityTrigger)
 				{
-					Application.Current.Dispatcher.Invoke(() =>
-					{
-						Configurations.Instance.IsTracking = false;
-						if (MessageBox.Show("Automatically deactivated log due to inactivity. Reactivate?", "Deactivated", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-						{
-							Configurations.Instance.IsTracking = true;
-						}
-					});
+					Configurations.Instance.IsTracking = false;
+					//if (MessageBox.Show("Automatically deactivated log due to inactivity. Reactivate?", "Deactivated", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+					//{
+					//	Configurations.Instance.IsTracking = true;
+					//}
 				}
-			}
-			Configurations.Instance.InactivityCount += 1;
+				else
+				{
+					Configurations.Instance.IsTracking = true;
+				}
+				Configurations.Instance.InactivityCount += 1;
+			});
 		}
 
 		public Reader()
@@ -242,9 +240,13 @@ namespace WindowTimeTracker.Models
                     if (Configurations.Instance.IsTracking)
                     {
 						WriteCurrentWindowInformation();
-						CheckInactivity();
-						Thread.Sleep(Configurations.Instance.ScanIntervalS * 1000);
 					}
+					if (Configurations.Instance.InactivityTrigger != 0)
+					{
+						//auto activate/deactivate if motion detected
+						HandleInactivity();
+					}
+					Thread.Sleep(Configurations.Instance.ScanIntervalS * 1000);
 				}
 			});
 

@@ -23,3 +23,5 @@ C:\Projects\WindowTimeTracker\WindowTimeTracker\bin\Debug\MaterialDesignColors.p
 C:\Projects\WindowTimeTracker\WindowTimeTracker\bin\Debug\MaterialDesignThemes.Wpf.pdb
 C:\Projects\WindowTimeTracker\WindowTimeTracker\bin\Debug\MaterialDesignThemes.Wpf.xml
 C:\Projects\WindowTimeTracker\WindowTimeTracker\obj\Debug\App.baml
+C:\Projects\WindowTimeTracker\WindowTimeTracker\bin\Debug\Newtonsoft.Json.dll
+C:\Projects\WindowTimeTracker\WindowTimeTracker\bin\Debug\Newtonsoft.Json.xml

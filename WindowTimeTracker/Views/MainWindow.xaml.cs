@@ -32,21 +32,30 @@ namespace WindowTimeTracker.Views
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var _result = MessageBox.Show("Save data to log?", "Warning", MessageBoxButton.YesNoCancel);
+            Models.Configurations.TrySerialize();
+#if DEBUG
+            var _result = MessageBox.Show("Save config & data to log?", "Warning", MessageBoxButton.YesNoCancel);
             if (_result == MessageBoxResult.Yes)
             {
                 Models.Configurations.Instance.SaveLogFile(true);
+                Models.Configurations.TrySerialize();
+
             }
             else if(_result == MessageBoxResult.Cancel)
             {
                 e.Cancel = true;
             }
-            
+#else
+            //always save in release
+            Models.Configurations.Instance.SaveLogFile(true);
+            Models.Configurations.TrySerialize();
+#endif
+
         }
 
         //private void MainWindow_Closed(object sender, EventArgs e)
         //{
         //}
-        
+
     }
 }
