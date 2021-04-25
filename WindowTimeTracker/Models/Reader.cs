@@ -15,6 +15,8 @@ namespace WindowTimeTracker.Models
 	/// </summary>
 	public class Reader
 	{
+		public Reader() { }
+
 		/// <summary>
 		/// Method wrapper for native methods called from c#.
 		/// </summary>
@@ -154,6 +156,7 @@ namespace WindowTimeTracker.Models
 
 			if (lastWindowTitle != windowTitle)
 			{
+				lastWindowTitle = windowTitle;
 				//Console.WriteLine("ProcessId: {0}\nFilename: {1}\nFileDescription: {2}\nProductName: {3}\nProcessName: {4}\nWindowTitle: {5}\nWindowHandle: {6}\n",
 				//	Convert.ToString(processId),
 				//	fileName,
@@ -177,7 +180,6 @@ namespace WindowTimeTracker.Models
                     Configurations.Instance.StringLog += $"{DateTime.Now.ToUniversalTime()},{fileDescription},{productName},{processName},{windowTitle}\n";
                 });
 
-				lastWindowTitle = windowTitle;
 			}
 		}
 		Point _originalMousePos;
@@ -230,30 +232,33 @@ namespace WindowTimeTracker.Models
 			});
 		}
 
-		public Reader()
-		{
-
-			Task.Run(() =>
+		Task _readerThread = null;
+		public void StartTracking()
+        {
+			if (_readerThread == null)
 			{
-                while(Application.Current != null)
-                {
-                    if (Configurations.Instance.IsTracking)
-                    {
-						WriteCurrentWindowInformation();
-					}
-					if (Configurations.Instance.InactivityTrigger != 0)
+				//run as seperate thread
+				_readerThread = Task.Run(() =>
+				{
+					while (Application.Current != null)
 					{
-						//auto activate/deactivate if motion detected
-						HandleInactivity();
+						if (Configurations.Instance.IsTracking)
+						{
+							WriteCurrentWindowInformation();
+						}
+						if (Configurations.Instance.InactivityTrigger != 0)
+						{
+							//auto activate/deactivate if motion detected
+							HandleInactivity();
+						}
+						Thread.Sleep(Configurations.Instance.ScanIntervalS * 1000);
 					}
-					Thread.Sleep(Configurations.Instance.ScanIntervalS * 1000);
-				}
-			});
-
+				});
+			}
 		}
 
 
-        public void StopTracking()
+		public void StopTracking()
         {
 			throw new NotImplementedException();
         }

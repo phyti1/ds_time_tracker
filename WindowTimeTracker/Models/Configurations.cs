@@ -21,6 +21,7 @@ namespace WindowTimeTracker.Models
                 if (_instance == null)
                 {
                     Configurations.Deserialize(_configFilePath, true);
+                    _instance.InitializeConfiguration();
                 }
                 return _instance;
             }
@@ -31,10 +32,12 @@ namespace WindowTimeTracker.Models
         }
         Reader _reader;
 
-        private Configurations()
+        private Configurations() { }
+        private void InitializeConfiguration()
         {
             _reader = new Reader();
             IsTracking = true;
+            _reader.StartTracking();
             //Log.CollectionChanged += Log_CollectionChanged;
         }
 
